@@ -1,37 +1,34 @@
 pub fn part1(input: &Vec<&str>) -> usize {
+    input.iter().map(|line| find_number(line.to_string())).sum()
+}
+
+pub fn part2(input: &Vec<&str>) -> usize {
+    let numbers = [
+        "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
+    ];
+
     input
         .iter()
         .map(|line| {
-            let mut string = String::from("");
-            string.push(line.chars().find(|c| c.is_digit(10)).unwrap());
-            string.push(line.chars().rev().find(|c| c.is_digit(10)).unwrap());
-            string.parse::<usize>().unwrap()
+            find_number(
+                numbers
+                    .iter()
+                    .enumerate()
+                    .fold(line.to_string(), |line, (i, number)| {
+                        line.replace(number, &format!("{}{}{}", number, i + 1, number))
+                    }),
+            )
         })
         .sum()
 }
 
-pub fn part2(input: &Vec<&str>) -> usize {
-    input
-        .iter()
-        .map(|line| {
-            let line = line
-                .replace("one", "one1one")
-                .replace("two", "two2two")
-                .replace("three", "three3three")
-                .replace("four", "four4four")
-                .replace("five", "five5five")
-                .replace("six", "six6six")
-                .replace("seven", "seven7seven")
-                .replace("eight", "eight8eight")
-                .replace("nine", "nine9nine");
+fn find_number(line: String) -> usize {
+    let first_number = line.chars().find(|c| c.is_digit(10)).unwrap();
+    let last_number = line.chars().rev().find(|c| c.is_digit(10)).unwrap();
 
-            let mut string = String::from("");
-            string.push(line.chars().find(|c| c.is_digit(10)).unwrap());
-            string.push(line.chars().rev().find(|c| c.is_digit(10)).unwrap());
-
-            string.parse::<usize>().unwrap()
-        })
-        .sum()
+    format!("{}{}", first_number, last_number)
+        .parse::<usize>()
+        .unwrap()
 }
 
 #[cfg(test)]
