@@ -73,7 +73,7 @@ impl<T> Grid<T> {
         NeighborIter::new(&self, coord, with_diagonals)
     }
 
-    fn index(&self, coord: Coord) -> usize {
+    pub fn index(&self, coord: Coord) -> usize {
         assert!(coord.0 < self.size.0);
         assert!(coord.1 < self.size.1);
 
